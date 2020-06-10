@@ -1,5 +1,6 @@
-# path = './CoNLL-2003/eng.train'
+path = './CoNLL-2003/eng.train'
 import re
+
 
 def findAll(mystring, charac):
     charac_left = charac[0]
@@ -11,13 +12,14 @@ def findAll(mystring, charac):
             left.append(i)
         if mystring[i] == charac_right:
             if len(left) == 1:
-                matched.append(mystring[left[0]:i+1])
+                matched.append(mystring[left[0]:i + 1])
                 left = []
             if len(left) > 1:
-                matched.append(mystring[left[-1]:i+1])
+                matched.append(mystring[left[-1]:i + 1])
                 left = left[:-1]
     matched.sort(key=len, reverse=True)
     return matched
+
 
 def removeBetweenBrackets(mystring):
     result1 = findAll(mystring, '()')
@@ -28,6 +30,7 @@ def removeBetweenBrackets(mystring):
         for x in res:
             mystring = mystring.replace(x, '')
     return mystring.strip()
+
 
 def main(path, test=None):
     with open(path, 'r', encoding='utf-8') as f:
@@ -59,16 +62,17 @@ def main(path, test=None):
                 except IndexError:
                     print("Index Error: ", x_split)
                 if ent != 'O':
-                    ent_sentence_spacy.append((index, index+len(word), ent))
-                    ent = ent.split('-')[1] # Remove B-... and I-... in front of the tags.
+                    ent = ent.split('-')[1]  # Remove B-... and I-... in front of the tags.
+                    ent_sentence_spacy.append((index, index + len(word), ent))
+
                 if len(word) > 0:
                     ents.append(ent)
-                index += len(word)+1
+                index += len(word) + 1
 
             else:
                 print('Short length x: ', x, ' . Removed.')
 
-        processed_sentence = " ".join(sentence)#.lower()
+        processed_sentence = " ".join(sentence)  # .lower()
         TRAIN_DATA.append((processed_sentence, {'entities': ent_sentence_spacy}))
         TEST_DATA.append(processed_sentence)
         entities.append(ents)
@@ -80,3 +84,7 @@ def main(path, test=None):
     print("Done getting data !")
     print("There are %d training sentences." % (len(TRAIN_DATA)))
     return TRAIN_DATA
+
+
+TRAIN_DATA = main(path)
+print(TRAIN_DATA)

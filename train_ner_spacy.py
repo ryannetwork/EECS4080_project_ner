@@ -45,6 +45,7 @@ else:
     print("Default number of iterations given: 16")
     n_iter = 16
 
+
 def main(model=None, output_dir=output_dir, n_iter=n_iter):
     """Load the model, set up the pipeline and train the entity recognizer."""
     if model is not None:
@@ -86,7 +87,7 @@ def main(model=None, output_dir=output_dir, n_iter=n_iter):
                     drop=0.5,  # dropout - make it harder to memorise data
                     sgd=optimizer,  # callable to update weights
                     losses=losses)
-            print('Epoch', str(itn+1)+'/'+str(n_iter), '. Losses', losses, ' in %fs' % (time.time()-start))
+            print('Epoch', str(itn + 1) + '/' + str(n_iter), '. Losses', losses, ' in %fs' % (time.time() - start))
 
     # save model to output directory
     if output_dir is not None:
@@ -96,7 +97,8 @@ def main(model=None, output_dir=output_dir, n_iter=n_iter):
         nlp.to_disk(output_dir)
         print("Saved model to", output_dir)
 
+
 START = time.time()
 if __name__ == '__main__':
     main(model=None, output_dir=output_dir, n_iter=n_iter)
-print('Done in %fs' % (time.time()-START))
+print('Done in %fs' % (time.time() - START))

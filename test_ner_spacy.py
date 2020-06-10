@@ -8,6 +8,7 @@ import sys
 import argparse
 from sklearn.metrics import accuracy_score
 from conllToSpacy import main
+import conllToSpacy
 
 # Parsing argument for command-line.
 parser = argparse.ArgumentParser(description="Testing an NER model with SpaCy.")
@@ -32,6 +33,7 @@ testing_tokens = [x.split() for x in testing]
 print('Length testing sentences: ', len(testing))
 print('Length testing tokens: ', len(testing_tokens))
 
+
 def compute_score(L1, L2):
     correct_answers = 0
     nb_answers = 0
@@ -41,7 +43,8 @@ def compute_score(L1, L2):
             if L1[i] == L2[i]:
                 correct_answers += 1
     print('%d correct out of %d answers.' % (correct_answers, nb_answers))
-    return correct_answers/nb_answers
+    return correct_answers / nb_answers
+
 
 def main():
     # test the saved model
@@ -66,7 +69,7 @@ def main():
                 print('Value Error! Ent:', list(ent.text), '. Text:', text)
         ent_pred.append(entities)
         testing_pred.append([t.text for t in doc])
-        print(str(count)+'/'+str(len(testing))+' done in %fs' % (time.time()-start))
+        print(str(count) + '/' + str(len(testing)) + ' done in %fs' % (time.time() - start))
         count += 1
 
     # Check whether there are the same number of sentences, and the same number of words in each sentence. 
@@ -86,14 +89,16 @@ def main():
 
     Precision = compute_score(y_pred, y_true)
     Recall = compute_score(y_true, y_pred)
-    F1_score = 2*(Recall * Precision) / (Recall + Precision)
-    print("Random accuracy: %0.2f" % (accuracy_score(y_true, ['O']*len(y_true))))
+    F1_score = 2 * (Recall * Precision) / (Recall + Precision)
+    print("Random accuracy: %0.2f" % (accuracy_score(y_true, ['O'] * len(y_true))))
     print("Accuracy score: %0.2f" % (accuracy_score(y_true, y_pred)))
     print('Precision: %0.2f' % (Precision))
     print('Recall: %0.2f' % (Recall))
     print('F1 score: %0.2f' % (F1_score))
-    # with open('score.csv', 'a', encoding='utf-8') as f:
-    #     f.write(os.path.basename(model) + ',' + str(Precision) + ',' + str(Recall) + ',' + str(F1_score) + '\n')
-        
+    with open('score.csv', 'a', encoding='utf-8') as f:
+        f.write(os.path.basename(model) + ',' + str(Precision) + ',' + str(Recall) + ',' + str(F1_score) + '\n')
+
+
 if __name__ == '__main__':
     main()
+
